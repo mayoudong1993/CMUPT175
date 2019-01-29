@@ -1,0 +1,44 @@
+class Square:
+    #Class constructor
+
+    #Public Attribute 可以通过instance 直接改
+    color = ""
+    #初始器， 构造器
+    def __init__(self, length, width):
+        # Private Attributes
+        # 通过constructor创建， 通过function来update
+        self.length = length
+        self.width = width
+
+    # Method
+    def getArea(self):
+        return self.length * self.width
+
+    def getColor(self):
+        return self.color
+
+    def setWidth(self, width):
+        self.width = width
+
+    # Class operator
+    def __gt__(self, another_Square):
+        return self.getArea() > another_Square.getArea()
+
+def main():
+    # #Create a instance of Square
+    # aSquare = Square(10, 8)
+    # aSquare.color = "Red"
+    # print(aSquare.getArea())
+    # print(aSquare.color)
+    # aSquare.setWidth(4)
+    # print(aSquare.getArea())
+    listSquare = []
+    for i in range(6, 3, -1):
+        newSquare = Square(i, i + 1)
+        newSquare.color = "red" + str(i)
+        listSquare.append(newSquare) #Create a list of instances of Square
+    listSquare.sort()
+    for item in listSquare:
+        print(item.getArea())
+        print(item.getColor())
+main()

@@ -1,0 +1,100 @@
+#返回所有Due的总和
+def calculatedue(dict):
+    totalDue = 100
+    #求和
+    return totalDue
+
+#返回 payment statement
+def generatepaymentstatement(dict):
+    statement = ''
+    return '这是一个statement'
+
+
+#返回所有payment的总和
+def calculatepayment(dict):
+    totalPayment = 0
+    #求和
+    return totalPayment
+
+#输入电话号码 返回这样的格式 （***）*** ****
+def standardformat(phonenumber):
+    return "（***）*** ****"
+
+def main():
+    #读取 families
+    familiesfile = open('families.txt', 'r')
+    familieslist = []
+    for line in familiesfile:
+        line = line.strip('\n')
+        familieslist.append(line.split(','))
+
+    #读取 dues
+    duesfile = open('dues.txt', 'r')
+    dueslist = []
+    for line in duesfile:
+        line = line.strip('\n')
+        dueslist.append(line.split(';'))
+
+    #读取 payments
+    paymentsfile = open('payments.txt', 'r')
+    paymentslist = []
+    for line in paymentsfile:
+        line = line.strip('\n')
+        paymentslist.append(line.split(';'))
+
+    print(familieslist)
+    print(dueslist)
+    print(paymentslist)
+
+    accountbook = []
+    accountdict = {}
+    accountbook.sort()
+    for [phonenumber, name, address] in familieslist:
+        number = phonenumber
+        accountbook.append(number)
+        accountdict[number] = {'name': name, 'payments': [], 'dues': []}
+
+    for [date, money, phonenumber] in dueslist:
+        number = phonenumber
+        accountdict[number]['dues'].append([date, money])
+
+    for [date, money, phonenumber] in paymentslist:
+        number = phonenumber
+        accountdict[number]['payments'].append([date,money])
+
+    print("+--------------+------------------+--------+-----+")
+    print("| Phone Number | Name             | Due    | Int |")
+    print("+--------------+------------------+--------+-----+")
+
+    sumdue = 0
+    sumint = 0
+    for number in accountbook:
+        totaldue = calculatedue(accountdict[number])
+        totalpayment = calculatepayment(accountdict[number])
+        sumdue += (totaldue - totalpayment)
+        paymentstatement = generatepaymentstatement(accountdict[number])
+        if totaldue - totalpayment >= 500:
+            formatednumber = standardformat(number)
+            sumint += (totaldue - totalpayment) * 0.01
+            print("|%s|%-18s|$%7.2f|$%4.2f|%s" %(formatednumber, '**' + accountdict[number]['name'], totaldue - totalpayment, (totaldue - totalpayment) * 0.01, paymentstatement))
+        elif totaldue - totalpayment >= 100:
+            formatednumber = standardformat(number)
+            sumint += (totaldue - totalpayment) * 0.01
+            print("|%s|%-18s|$%7.2f|$%4.2f|%s" %(formatednumber, accountdict[number]['name'], totaldue - totalpayment, (totaldue - totalpayment) * 0.01, paymentstatement))
+        elif totaldue - totalpayment > 0:
+            formatednumber = standardformat(number)
+            print("|%s|%-18s|$%7.2f|     |%s" %(formatednumber, accountdict[number]['name'], totaldue - totalpayment, paymentstatement))
+        else:
+            continue
+
+    print("+--------------+------------------+--------+-----+")
+    print("| Total Dues   |                $%10.2f|" %sumdue)
+    print("+--------------+---------------------------+")
+    print("| Total Interes|                  $%8.2f|" %sumint)
+    print("+--------------+---------------------------+")
+
+
+    summary = open('summary.txt', 'w')
+    summary.write("")
+
+main()
